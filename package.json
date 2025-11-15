@@ -1,0 +1,62 @@
+{
+  "name": "achronyme-soc",
+  "displayName": "Achronyme SOC Language",
+  "description": "Language support for Achronyme SOC (Scientific Operations Calculator)",
+  "version": "0.1.0",
+  "publisher": "achronyme",
+  "engines": {
+    "vscode": "^1.74.0"
+  },
+  "categories": [
+    "Programming Languages",
+    "Snippets"
+  ],
+  "activationEvents": [
+    "onLanguage:soc"
+  ],
+  "main": "./out/extension.js",
+  "contributes": {
+    "languages": [
+      {
+        "id": "soc",
+        "aliases": [
+          "Achronyme SOC",
+          "soc",
+          "achronyme"
+        ],
+        "extensions": [
+          ".soc",
+          ".ach"
+        ],
+        "configuration": "./language-configuration.json"
+      }
+    ],
+    "grammars": [
+      {
+        "language": "soc",
+        "scopeName": "source.soc",
+        "path": "./syntaxes/soc.tmLanguage.json"
+      }
+    ],
+    "snippets": [
+      {
+        "language": "soc",
+        "path": "./snippets/soc.json"
+      }
+    ]
+  },
+  "scripts": {
+    "vscode:prepublish": "npm run compile",
+    "compile": "tsc -p ./",
+    "watch": "tsc -watch -p ./",
+    "lint": "eslint src --ext ts"
+  },
+  "devDependencies": {
+    "@types/node": "^18.0.0",
+    "@types/vscode": "^1.74.0",
+    "@typescript-eslint/eslint-plugin": "^5.0.0",
+    "@typescript-eslint/parser": "^5.0.0",
+    "eslint": "^8.0.0",
+    "typescript": "^4.9.0"
+  }
+}

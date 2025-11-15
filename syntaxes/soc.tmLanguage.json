@@ -1,0 +1,217 @@
+{
+  "$schema": "https://raw.githubusercontent.com/martinring/tmlanguage/master/tmlanguage.json",
+  "name": "Achronyme SOC",
+  "scopeName": "source.soc",
+  "patterns": [
+    { "include": "#comments" },
+    { "include": "#strings" },
+    { "include": "#keywords" },
+    { "include": "#types" },
+    { "include": "#constants" },
+    { "include": "#numbers" },
+    { "include": "#operators" },
+    { "include": "#functions" },
+    { "include": "#identifiers" }
+  ],
+  "repository": {
+    "comments": {
+      "patterns": [
+        {
+          "name": "comment.line.double-slash.soc",
+          "match": "//.*$"
+        }
+      ]
+    },
+    "strings": {
+      "patterns": [
+        {
+          "name": "string.quoted.double.soc",
+          "begin": "\"",
+          "end": "\"",
+          "patterns": [
+            {
+              "name": "constant.character.escape.soc",
+              "match": "\\\\(n|t|r|\\\\|\")"
+            }
+          ]
+        }
+      ]
+    },
+    "keywords": {
+      "patterns": [
+        {
+          "name": "keyword.control.soc",
+          "match": "\\b(if|else|while|for|in|return|yield|generate|do)\\b"
+        },
+        {
+          "name": "keyword.declaration.soc",
+          "match": "\\b(let|mut|type)\\b"
+        },
+        {
+          "name": "keyword.import.soc",
+          "match": "\\b(import|from|export|as)\\b"
+        },
+        {
+          "name": "variable.language.soc",
+          "match": "\\b(self|rec)\\b"
+        },
+        {
+          "name": "constant.language.boolean.soc",
+          "match": "\\b(true|false)\\b"
+        },
+        {
+          "name": "constant.language.null.soc",
+          "match": "\\b(null)\\b"
+        }
+      ]
+    },
+    "types": {
+      "patterns": [
+        {
+          "name": "support.type.primitive.soc",
+          "match": "\\b(Number|Boolean|String|Complex|Vector|Tensor|Generator|Edge|Any)\\b"
+        }
+      ]
+    },
+    "constants": {
+      "patterns": [
+        {
+          "name": "constant.numeric.mathematical.soc",
+          "match": "\\b(PI|pi|E|e|PHI|phi|SQRT2|sqrt2|SQRT3|sqrt3|LN2|ln2|LN10|ln10)\\b"
+        }
+      ]
+    },
+    "numbers": {
+      "patterns": [
+        {
+          "name": "constant.numeric.complex.soc",
+          "match": "-?\\d+(\\.\\d+)?([eE][+-]?\\d+)?i\\b"
+        },
+        {
+          "name": "constant.numeric.float.soc",
+          "match": "-?\\d+\\.\\d+([eE][+-]?\\d+)?"
+        },
+        {
+          "name": "constant.numeric.integer.soc",
+          "match": "-?\\d+([eE][+-]?\\d+)?"
+        }
+      ]
+    },
+    "operators": {
+      "patterns": [
+        {
+          "name": "keyword.operator.arrow.soc",
+          "match": "=>|->|<>"
+        },
+        {
+          "name": "keyword.operator.logical.soc",
+          "match": "&&|\\|\\||!"
+        },
+        {
+          "name": "keyword.operator.comparison.soc",
+          "match": "==|!=|>=|<=|>|<"
+        },
+        {
+          "name": "keyword.operator.arithmetic.soc",
+          "match": "\\+|-|\\*|/|%|\\^"
+        },
+        {
+          "name": "keyword.operator.spread.soc",
+          "match": "\\.\\.\\."
+        },
+        {
+          "name": "keyword.operator.range.soc",
+          "match": "\\.\\."
+        },
+        {
+          "name": "keyword.operator.assignment.soc",
+          "match": "="
+        },
+        {
+          "name": "keyword.operator.type.soc",
+          "match": ":|\\|"
+        }
+      ]
+    },
+    "functions": {
+      "patterns": [
+        {
+          "name": "support.function.builtin.math.soc",
+          "match": "\\b(sin|cos|tan|asin|acos|atan|atan2|sinh|cosh|tanh|exp|ln|log|log10|log2|sqrt|cbrt|pow|floor|ceil|round|trunc|abs|sign|deg|rad|min|max)\\b"
+        },
+        {
+          "name": "support.function.builtin.complex.soc",
+          "match": "\\b(complex|real|imag|conj|arg)\\b"
+        },
+        {
+          "name": "support.function.builtin.vector.soc",
+          "match": "\\b(dot|cross|norm|normalize)\\b"
+        },
+        {
+          "name": "support.function.builtin.matrix.soc",
+          "match": "\\b(transpose|det|trace)\\b"
+        },
+        {
+          "name": "support.function.builtin.array.soc",
+          "match": "\\b(len|range|product|reverse|zip|flatten|take|drop|slice|unique|chunk|contains)\\b"
+        },
+        {
+          "name": "support.function.builtin.higherorder.soc",
+          "match": "\\b(map|filter|reduce|pipe|any|all|find|findIndex|count)\\b"
+        },
+        {
+          "name": "support.function.builtin.stats.soc",
+          "match": "\\b(sum|mean|std)\\b"
+        },
+        {
+          "name": "support.function.builtin.string.soc",
+          "match": "\\b(concat|length|upper|lower|trim|trim_start|trim_end|starts_with|ends_with|replace|split|join|pad_start|pad_end)\\b"
+        },
+        {
+          "name": "support.function.builtin.record.soc",
+          "match": "\\b(keys|values|has_field)\\b"
+        },
+        {
+          "name": "support.function.builtin.utility.soc",
+          "match": "\\b(print|typeof|str)\\b"
+        },
+        {
+          "name": "support.function.builtin.env.soc",
+          "match": "\\b(save_env|restore_env|env_info)\\b"
+        },
+        {
+          "name": "support.function.builtin.numerical.soc",
+          "match": "\\b(diff|diff2|diff3|gradient|integral|trapz|simpson|romberg|quad|solve|bisect|newton|secant)\\b"
+        },
+        {
+          "name": "support.function.builtin.dsp.soc",
+          "match": "\\b(fft|ifft|fft_mag|fft_phase|conv|conv_fft|hanning|hamming|blackman|rectangular|linspace)\\b"
+        },
+        {
+          "name": "support.function.builtin.graph.soc",
+          "match": "\\b(network|nodes|edges|neighbors|degree|bfs|dfs|bfs_path|dijkstra|has_cycle|kruskal|prim|connected_components|is_connected|topological_sort)\\b"
+        },
+        {
+          "name": "support.function.builtin.pert.soc",
+          "match": "\\b(forward_pass|backward_pass|calculate_slack|critical_path|all_critical_paths)\\b"
+        },
+        {
+          "name": "support.function.builtin.optimization.soc",
+          "match": "\\b(simplex|linprog|dual_simplex|two_phase_simplex|revised_simplex|objective_value|shadow_price|sensitivity_c|sensitivity_b)\\b"
+        },
+        {
+          "name": "entity.name.function.soc",
+          "match": "\\b([a-zA-Z_][a-zA-Z0-9_]*)\\s*(?=\\()"
+        }
+      ]
+    },
+    "identifiers": {
+      "patterns": [
+        {
+          "name": "variable.other.soc",
+          "match": "\\b[a-zA-Z_][a-zA-Z0-9_]*\\b"
+        }
+      ]
+    }
+  }
+}

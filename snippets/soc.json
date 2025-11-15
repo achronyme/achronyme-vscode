@@ -1,0 +1,197 @@
+{
+  "Let Declaration": {
+    "prefix": "let",
+    "body": ["let ${1:name} = ${2:value}"],
+    "description": "Immutable variable declaration"
+  },
+  "Let with Type": {
+    "prefix": "lett",
+    "body": ["let ${1:name}: ${2:Type} = ${3:value}"],
+    "description": "Typed immutable variable declaration"
+  },
+  "Mut Declaration": {
+    "prefix": "mut",
+    "body": ["mut ${1:name} = ${2:value}"],
+    "description": "Mutable variable declaration"
+  },
+  "Mut with Type": {
+    "prefix": "mutt",
+    "body": ["mut ${1:name}: ${2:Type} = ${3:value}"],
+    "description": "Typed mutable variable declaration"
+  },
+  "Lambda Function": {
+    "prefix": "lam",
+    "body": ["${1:x} => ${2:expression}"],
+    "description": "Lambda function"
+  },
+  "Lambda with Params": {
+    "prefix": "lamp",
+    "body": ["(${1:x}, ${2:y}) => ${3:expression}"],
+    "description": "Lambda with multiple parameters"
+  },
+  "Typed Lambda": {
+    "prefix": "lamt",
+    "body": ["(${1:x}: ${2:Type}): ${3:ReturnType} => ${4:expression}"],
+    "description": "Lambda with type annotations"
+  },
+  "If Expression": {
+    "prefix": "if",
+    "body": ["if(${1:condition}) {", "\t${2:// then}", "} else {", "\t${3:// else}", "}"],
+    "description": "If-else expression"
+  },
+  "If Simple": {
+    "prefix": "ifs",
+    "body": ["if(${1:condition}) { ${2:then} } else { ${3:else} }"],
+    "description": "Single-line if-else expression"
+  },
+  "While Loop": {
+    "prefix": "while",
+    "body": ["while(${1:condition}) {", "\t${2:// body}", "}"],
+    "description": "While loop"
+  },
+  "For-In Loop": {
+    "prefix": "for",
+    "body": ["for(${1:item} in ${2:iterable}) {", "\t${3:// body}", "}"],
+    "description": "For-in loop"
+  },
+  "Do Block": {
+    "prefix": "do",
+    "body": ["do {", "\t${1:// statements}", "\t${2:result}", "}"],
+    "description": "Do block expression"
+  },
+  "Generator": {
+    "prefix": "gen",
+    "body": ["generate {", "\tyield ${1:value}", "\t${2:// more yields}", "}"],
+    "description": "Generator block"
+  },
+  "Record": {
+    "prefix": "rec",
+    "body": ["{", "\t${1:key}: ${2:value}$0", "}"],
+    "description": "Record literal"
+  },
+  "Record with Mutable": {
+    "prefix": "recm",
+    "body": ["{", "\tmut ${1:key}: ${2:value},", "\t${3:key2}: ${4:value2}", "}"],
+    "description": "Record with mutable field"
+  },
+  "Array": {
+    "prefix": "arr",
+    "body": ["[${1:elements}]"],
+    "description": "Array literal"
+  },
+  "Matrix 2x2": {
+    "prefix": "mat2",
+    "body": ["[", "\t[${1:a}, ${2:b}],", "\t[${3:c}, ${4:d}]", "]"],
+    "description": "2x2 matrix"
+  },
+  "Matrix 3x3": {
+    "prefix": "mat3",
+    "body": ["[", "\t[${1:a}, ${2:b}, ${3:c}],", "\t[${4:d}, ${5:e}, ${6:f}],", "\t[${7:g}, ${8:h}, ${9:i}]", "]"],
+    "description": "3x3 matrix"
+  },
+  "Import": {
+    "prefix": "imp",
+    "body": ["import { ${1:functions} } from \"${2:module}\""],
+    "description": "Import statement"
+  },
+  "Import with Alias": {
+    "prefix": "impa",
+    "body": ["import { ${1:name} as ${2:alias} } from \"${3:module}\""],
+    "description": "Import with alias"
+  },
+  "Export": {
+    "prefix": "exp",
+    "body": ["export { ${1:names} }"],
+    "description": "Export statement"
+  },
+  "Type Alias": {
+    "prefix": "type",
+    "body": ["type ${1:Name} = ${2:Definition}"],
+    "description": "Type alias declaration"
+  },
+  "Union Type": {
+    "prefix": "union",
+    "body": ["${1:Type1} | ${2:Type2}"],
+    "description": "Union type"
+  },
+  "Record Type": {
+    "prefix": "rect",
+    "body": ["{ ${1:field}: ${2:Type} }"],
+    "description": "Record type annotation"
+  },
+  "Function Type": {
+    "prefix": "fnt",
+    "body": ["(${1:ParamType}) => ${2:ReturnType}"],
+    "description": "Function type annotation"
+  },
+  "Tensor Type": {
+    "prefix": "tensor",
+    "body": ["Tensor<${1:Number}, [${2:dims}]>"],
+    "description": "Tensor type with shape"
+  },
+  "Optional Type": {
+    "prefix": "opt",
+    "body": ["${1:Type} | null"],
+    "description": "Optional type (nullable)"
+  },
+  "Map Function": {
+    "prefix": "map",
+    "body": ["map(${1:array}, ${2:x} => ${3:expression})"],
+    "description": "Map over array"
+  },
+  "Filter Function": {
+    "prefix": "filter",
+    "body": ["filter(${1:array}, ${2:x} => ${3:condition})"],
+    "description": "Filter array"
+  },
+  "Reduce Function": {
+    "prefix": "reduce",
+    "body": ["reduce(${1:array}, (${2:acc}, ${3:x}) => ${4:expression}, ${5:initial})"],
+    "description": "Reduce array"
+  },
+  "Pipe Function": {
+    "prefix": "pipe",
+    "body": ["pipe(${1:value}, ${2:fn1}, ${3:fn2})"],
+    "description": "Pipe value through functions"
+  },
+  "Recursive Function": {
+    "prefix": "recfn",
+    "body": ["let ${1:name} = ${2:n} => if(${3:base_condition}) { ${4:base_case} } else { ${5:rec(${6:recursive_call})} }"],
+    "description": "Recursive function with rec"
+  },
+  "Factorial": {
+    "prefix": "fact",
+    "body": ["let factorial = n => if(n <= 1) { 1 } else { n * rec(n - 1) }"],
+    "description": "Factorial function"
+  },
+  "Edge Directed": {
+    "prefix": "edge",
+    "body": ["${1:A} -> ${2:B}"],
+    "description": "Directed edge"
+  },
+  "Edge with Metadata": {
+    "prefix": "edgem",
+    "body": ["${1:A} -> ${2:B} : { ${3:weight}: ${4:value} }"],
+    "description": "Directed edge with metadata"
+  },
+  "Network": {
+    "prefix": "net",
+    "body": ["let ${1:graph} = network([", "\t${2:A} -> ${3:B},", "\t${4:B} -> ${5:C}", "])"],
+    "description": "Create network from edges"
+  },
+  "Range": {
+    "prefix": "range",
+    "body": ["range(${1:start}, ${2:end})"],
+    "description": "Create range"
+  },
+  "Linspace": {
+    "prefix": "lin",
+    "body": ["linspace(${1:start}, ${2:end}, ${3:n})"],
+    "description": "Create linearly spaced array"
+  },
+  "Comment Header": {
+    "prefix": "comh",
+    "body": ["// ============================================================================", "// ${1:Section Name}", "// ============================================================================"],
+    "description": "Section comment header"
+  }
+}
