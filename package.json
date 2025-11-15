@@ -4,6 +4,7 @@
   "description": "Language support for Achronyme SOC (Scientific Operations Calculator)",
   "version": "0.1.0",
   "publisher": "achronyme",
+  "icon": "logo.png",
   "engines": {
     "vscode": "^1.74.0"
   },
