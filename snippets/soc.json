@@ -193,5 +193,56 @@
     "prefix": "comh",
     "body": ["// ============================================================================", "// ${1:Section Name}", "// ============================================================================"],
     "description": "Section comment header"
+  },
+  "Match Expression": {
+    "prefix": "match",
+    "body": ["match ${1:value} {", "\t${2:pattern} => ${3:expression},", "\t_ => ${4:default}", "}"],
+    "description": "Pattern matching expression"
+  },
+  "Match with Guard": {
+    "prefix": "matchg",
+    "body": ["match ${1:value} {", "\t${2:n} if (${3:condition}) => ${4:expression},", "\t_ => ${5:default}", "}"],
+    "description": "Pattern matching with guard clause"
+  },
+  "Match Type Pattern": {
+    "prefix": "matcht",
+    "body": ["match ${1:value} {", "\tNumber => ${2:\"number\"},", "\tString => ${3:\"string\"},", "\tBoolean => ${4:\"boolean\"},", "\t_ => ${5:\"other\"}", "}"],
+    "description": "Pattern matching by type"
+  },
+  "Match Record Pattern": {
+    "prefix": "matchr",
+    "body": ["match ${1:record} {", "\t{ ${2:key}: ${3:value} } => ${4:expression},", "\t_ => ${5:default}", "}"],
+    "description": "Pattern matching with record destructuring"
+  },
+  "Match Vector Pattern": {
+    "prefix": "matchv",
+    "body": ["match ${1:list} {", "\t[] => ${2:\"empty\"},", "\t[${3:head}, ...${4:tail}] => ${5:expression},", "\t_ => ${6:default}", "}"],
+    "description": "Pattern matching with vector destructuring"
+  },
+  "Try-Catch": {
+    "prefix": "try",
+    "body": ["try {", "\t${1:// code that might throw}", "} catch (${2:error}) {", "\t${3:// handle error}", "}"],
+    "description": "Try-catch error handling block"
+  },
+  "Try-Catch with Match": {
+    "prefix": "trym",
+    "body": ["try {", "\t${1:// code that might throw}", "} catch (err) {", "\tmatch err {", "\t\t{ message: m, kind: \"${2:ValueError}\" } => ${3:\"value error\"},", "\t\t{ message: m } => ${4:\"error: \" + m}", "\t}", "}"],
+    "description": "Try-catch with pattern matching on error"
+  },
+  "Throw Error": {
+    "prefix": "throw",
+    "body": ["throw \"${1:error message}\""],
+    "description": "Throw simple error"
+  },
+  "Throw Custom Error": {
+    "prefix": "throwe",
+    "body": ["throw { message: \"${1:error message}\", kind: \"${2:ErrorType}\" }"],
+    "description": "Throw error with kind"
+  },
+  "Error Guard": {
+    "prefix": "errg",
+    "body": ["if (${1:condition}) {", "\tthrow \"${2:error message}\"", "} else {", "\t${3:result}", "}"],
+    "description": "Guard clause with error throwing"
   }
 }
+

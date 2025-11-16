@@ -41,7 +41,7 @@
       "patterns": [
         {
           "name": "keyword.control.soc",
-          "match": "\\b(if|else|while|for|in|return|yield|generate|do)\\b"
+          "match": "\\b(if|else|while|for|in|return|yield|generate|do|match|try|catch|throw)\\b"
         },
         {
           "name": "keyword.declaration.soc",
@@ -69,7 +69,7 @@
       "patterns": [
         {
           "name": "support.type.primitive.soc",
-          "match": "\\b(Number|Boolean|String|Complex|Vector|Tensor|Generator|Edge|Any)\\b"
+          "match": "\\b(Number|Boolean|String|Complex|Vector|Tensor|Generator|Edge|Any|Record|Error|Function|Null)\\b"
         }
       ]
     },

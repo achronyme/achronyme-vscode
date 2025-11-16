@@ -56,6 +56,33 @@
         "label": "Achronyme File Icons",
         "path": "./icons/achronyme-icon-theme.json"
       }
+    ],
+    "configuration": {
+      "type": "object",
+      "title": "Achronyme",
+      "properties": {
+        "achronyme.lsp.enabled": {
+          "type": "boolean",
+          "default": true,
+          "description": "Enable Achronyme Language Server"
+        },
+        "achronyme.lsp.serverPath": {
+          "type": "string",
+          "default": "",
+          "description": "Path to achronyme-lsp executable. Leave empty to use bundled or PATH."
+        },
+        "achronyme.lsp.debug": {
+          "type": "boolean",
+          "default": false,
+          "description": "Enable debug logging for the language server"
+        }
+      }
+    },
+    "commands": [
+      {
+        "command": "achronyme.restartServer",
+        "title": "Achronyme: Restart Language Server"
+      }
     ]
   },
   "scripts": {
@@ -63,6 +90,9 @@
     "compile": "tsc -p ./",
     "watch": "tsc -watch -p ./",
     "lint": "eslint src --ext ts"
+  },
+  "dependencies": {
+    "vscode-languageclient": "^9.0.1"
   },
   "devDependencies": {
     "@types/node": "^18.0.0",
