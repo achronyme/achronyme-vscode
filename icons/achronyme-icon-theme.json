@@ -1,0 +1,18 @@
+{
+  "iconDefinitions": {
+    "_soc_file": {
+      "iconPath": "./soc-file.png"
+    },
+    "_ach_file": {
+      "iconPath": "./soc-file.png"
+    }
+  },
+  "fileExtensions": {
+    "soc": "_soc_file",
+    "ach": "_ach_file"
+  },
+  "fileNames": {},
+  "languageIds": {
+    "soc": "_soc_file"
+  }
+}

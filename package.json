@@ -49,6 +49,13 @@
         "language": "soc",
         "path": "./snippets/soc.json"
       }
+    ],
+    "iconThemes": [
+      {
+        "id": "achronyme-icons",
+        "label": "Achronyme File Icons",
+        "path": "./icons/achronyme-icon-theme.json"
+      }
     ]
   },
   "scripts": {
