@@ -14,7 +14,7 @@ import {
 
 let client: LanguageClient | undefined;
 const LSP_REPO = 'achronyme/achronyme-core';
-const LSP_VERSION = '0.1.0';
+const LSP_VERSION = '0.1.1';
 
 function getPlatformInfo(): { platform: string; arch: string; ext: string } {
     const platform = os.platform();
