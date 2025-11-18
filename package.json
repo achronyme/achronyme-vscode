@@ -92,6 +92,11 @@
         "command": "achronyme.restartServer",
         "title": "Restart Language Server",
         "category": "Achronyme"
+      },
+      {
+        "command": "achronyme.showLogs",
+        "title": "Show Logs",
+        "category": "Achronyme"
       }
     ]
   },
