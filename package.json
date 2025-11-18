@@ -1,8 +1,8 @@
 {
   "name": "achronyme-soc",
   "displayName": "Achronyme SOC Language",
-  "description": "Language support for Achronyme SOC (Scientific Operations Calculator)",
-  "version": "0.1.0",
+  "description": "Full language support for Achronyme SOC with LSP features: code completion, diagnostics, formatting, navigation, and more",
+  "version": "0.2.0",
   "publisher": "achronyme",
   "icon": "logo.png",
   "repository": {
@@ -15,7 +15,16 @@
   },
   "categories": [
     "Programming Languages",
-    "Snippets"
+    "Snippets",
+    "Formatters",
+    "Linters"
+  ],
+  "keywords": [
+    "achronyme",
+    "scientific computing",
+    "calculator",
+    "lsp",
+    "language server"
   ],
   "activationEvents": [
     "onLanguage:soc"
@@ -81,7 +90,8 @@
     "commands": [
       {
         "command": "achronyme.restartServer",
-        "title": "Achronyme: Restart Language Server"
+        "title": "Restart Language Server",
+        "category": "Achronyme"
       }
     ]
   },
