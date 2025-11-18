@@ -3,8 +3,8 @@ import * as path from 'path';
 import * as fs from 'fs';
 import * as https from 'https';
 import * as os from 'os';
-import * as zlib from 'zlib';
-import { execSync } from 'child_process';
+import * as tar from 'tar';
+import AdmZip from 'adm-zip';
 import {
     LanguageClient,
     LanguageClientOptions,
@@ -16,26 +16,30 @@ let client: LanguageClient | undefined;
 const LSP_REPO = 'achronyme/achronyme-core';
 const LSP_VERSION = '0.1.1';
 
-function getPlatformInfo(): { platform: string; arch: string; ext: string } {
+function getPlatformInfo(): { platform: string; arch: string; archiveExt: string; binaryExt: string } {
     const platform = os.platform();
     const arch = os.arch();
 
     let platformName: string;
     let archName: string;
-    let ext: string;
+    let archiveExt: string;
+    let binaryExt: string;
 
     switch (platform) {
         case 'win32':
             platformName = 'windows';
-            ext = '.exe';
+            archiveExt = '.zip';
+            binaryExt = '.exe';
             break;
         case 'darwin':
             platformName = 'macos';
-            ext = '';
+            archiveExt = '.tar.gz';
+            binaryExt = '';
             break;
         case 'linux':
             platformName = 'linux';
-            ext = '';
+            archiveExt = '.tar.gz';
+            binaryExt = '';
             break;
         default:
             throw new Error(`Unsupported platform: ${platform}`);
@@ -52,12 +56,12 @@ function getPlatformInfo(): { platform: string; arch: string; ext: string } {
             throw new Error(`Unsupported architecture: ${arch}`);
     }
 
-    return { platform: platformName, arch: archName, ext };
+    return { platform: platformName, arch: archName, archiveExt, binaryExt };
 }
 
 function getAssetName(): string {
-    const { platform, arch } = getPlatformInfo();
-    return `achronyme-lsp-${LSP_VERSION}-${platform}-${arch}.tar.gz`;
+    const { platform, arch, archiveExt } = getPlatformInfo();
+    return `achronyme-lsp-${LSP_VERSION}-${platform}-${arch}${archiveExt}`;
 }
 
 function getServerDir(context: vscode.ExtensionContext): string {
@@ -65,8 +69,8 @@ function getServerDir(context: vscode.ExtensionContext): string {
 }
 
 function getServerBinaryPath(context: vscode.ExtensionContext): string {
-    const { ext } = getPlatformInfo();
-    return path.join(getServerDir(context), `achronyme-lsp${ext}`);
+    const { binaryExt } = getPlatformInfo();
+    return path.join(getServerDir(context), `achronyme-lsp${binaryExt}`);
 }
 
 async function downloadFile(url: string): Promise<Buffer> {
@@ -99,93 +103,50 @@ async function downloadFile(url: string): Promise<Buffer> {
     });
 }
 
-async function extractTarGz(buffer: Buffer, destDir: string): Promise<void> {
-    // Simple tar.gz extraction using Node.js streams
-    return new Promise((resolve, reject) => {
-        const gunzip = zlib.createGunzip();
+async function extractArchive(buffer: Buffer, destDir: string, archiveExt: string): Promise<void> {
+    if (archiveExt === '.zip') {
+        // Extract ZIP using adm-zip
+        const zip = new AdmZip(buffer);
+        const zipEntries = zip.getEntries();
 
-        gunzip.on('error', reject);
+        for (const entry of zipEntries) {
+            if (!entry.isDirectory) {
+                const filePath = path.join(destDir, path.basename(entry.entryName));
+                fs.writeFileSync(filePath, entry.getData());
 
-        // Simple tar parser - extracts single file
-        let headerBuffer = Buffer.alloc(0);
-        let fileSize = 0;
-        let fileName = '';
-        let fileData = Buffer.alloc(0);
-        let state: 'header' | 'data' | 'padding' = 'header';
-        let bytesRemaining = 0;
-
-        gunzip.on('data', (chunk: Buffer) => {
-            let offset = 0;
-
-            while (offset < chunk.length) {
-                if (state === 'header') {
-                    const needed = 512 - headerBuffer.length;
-                    const available = chunk.length - offset;
-                    const toCopy = Math.min(needed, available);
-
-                    headerBuffer = Buffer.concat([headerBuffer, chunk.slice(offset, offset + toCopy)]);
-                    offset += toCopy;
-
-                    if (headerBuffer.length === 512) {
-                        // Parse tar header
-                        if (headerBuffer[0] === 0) {
-                            // End of archive
-                            return;
-                        }
-
-                        fileName = headerBuffer.slice(0, 100).toString('utf8').replace(/\0/g, '').trim();
-                        const sizeStr = headerBuffer.slice(124, 136).toString('utf8').replace(/\0/g, '').trim();
-                        fileSize = parseInt(sizeStr, 8);
-
-                        if (fileName && fileSize > 0 && !fileName.endsWith('/')) {
-                            state = 'data';
-                            bytesRemaining = fileSize;
-                            fileData = Buffer.alloc(0);
-                        } else {
-                            // Skip directory or empty entry
-                            headerBuffer = Buffer.alloc(0);
-                        }
-                    }
-                } else if (state === 'data') {
-                    const available = chunk.length - offset;
-                    const toCopy = Math.min(bytesRemaining, available);
-
-                    fileData = Buffer.concat([fileData, chunk.slice(offset, offset + toCopy)]);
-                    offset += toCopy;
-                    bytesRemaining -= toCopy;
-
-                    if (bytesRemaining === 0) {
-                        // Write file
-                        const filePath = path.join(destDir, path.basename(fileName));
-                        fs.writeFileSync(filePath, fileData);
-
-                        // Make executable on Unix
-                        if (os.platform() !== 'win32') {
-                            fs.chmodSync(filePath, 0o755);
-                        }
-
-                        // Skip padding to 512-byte boundary
-                        const padding = (512 - (fileSize % 512)) % 512;
-                        state = 'padding';
-                        bytesRemaining = padding;
-                    }
-                } else if (state === 'padding') {
-                    const available = chunk.length - offset;
-                    const toSkip = Math.min(bytesRemaining, available);
-                    offset += toSkip;
-                    bytesRemaining -= toSkip;
-
-                    if (bytesRemaining === 0) {
-                        state = 'header';
-                        headerBuffer = Buffer.alloc(0);
-                    }
+                // Make executable on Unix (though unlikely for zip from Windows)
+                if (os.platform() !== 'win32') {
+                    fs.chmodSync(filePath, 0o755);
                 }
             }
-        });
+        }
+    } else if (archiveExt === '.tar.gz') {
+        // Extract tar.gz using tar library
+        const tempTarPath = path.join(destDir, 'temp.tar.gz');
+        fs.writeFileSync(tempTarPath, buffer);
 
-        gunzip.on('end', resolve);
-        gunzip.end(buffer);
-    });
+        try {
+            await tar.x({
+                file: tempTarPath,
+                cwd: destDir,
+                strip: 1, // Strip leading directory component
+            });
+
+            // Make binary executable on Unix
+            const { binaryExt } = getPlatformInfo();
+            const binaryPath = path.join(destDir, `achronyme-lsp${binaryExt}`);
+            if (fs.existsSync(binaryPath) && os.platform() !== 'win32') {
+                fs.chmodSync(binaryPath, 0o755);
+            }
+        } finally {
+            // Clean up temp file
+            if (fs.existsSync(tempTarPath)) {
+                fs.unlinkSync(tempTarPath);
+            }
+        }
+    } else {
+        throw new Error(`Unsupported archive format: ${archiveExt}`);
+    }
 }
 
 async function downloadLspServer(context: vscode.ExtensionContext): Promise<string | undefined> {
@@ -221,7 +182,8 @@ async function downloadLspServer(context: vscode.ExtensionContext): Promise<stri
                 progress.report({ message: 'Extracting Language Server...' });
 
                 // Extract
-                await extractTarGz(buffer, serverDir);
+                const { archiveExt } = getPlatformInfo();
+                await extractArchive(buffer, serverDir, archiveExt);
 
                 if (fs.existsSync(binaryPath)) {
                     vscode.window.showInformationMessage('Achronyme Language Server installed successfully!');
@@ -257,8 +219,8 @@ function findServerPath(context: vscode.ExtensionContext): string | undefined {
     }
 
     // Try to find bundled server in extension directory
-    const { ext } = getPlatformInfo();
-    const bundledPath = path.join(context.extensionPath, 'server', `achronyme-lsp${ext}`);
+    const { binaryExt } = getPlatformInfo();
+    const bundledPath = path.join(context.extensionPath, 'server', `achronyme-lsp${binaryExt}`);
     if (fs.existsSync(bundledPath)) {
         return bundledPath;
     }
